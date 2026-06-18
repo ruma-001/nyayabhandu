@@ -524,5 +524,99 @@
       ],
       "tips": ["PIL must be bonafide — courts penalize publicity-seeking petitions", "Amicus curiae may be appointed for complex matters", "Supreme Court Legal Services Committee can assist indigent petitioners"]
     }
+  ],
+  "cases": [
+    {
+      "id": "cnr-dlhc010012342020",
+      "cnr": "DLHC010012342020",
+      "case_type": "CS (COMM) 123/2020",
+      "case_number": "123/2020",
+      "filing_number": "F-456/2020",
+      "court": "Delhi High Court",
+      "court_complex": "Delhi High Court, New Delhi",
+      "state": "Delhi",
+      "district": "New Delhi",
+      "status": "Pending",
+      "stage": "Arguments",
+      "petitioner": "Ramesh Kumar Trading Pvt. Ltd.",
+      "respondent": "Suresh Enterprises",
+      "filing_date": "15-03-2020",
+      "registration_date": "22-03-2020",
+      "next_hearing_date": "2026-07-15",
+      "decision_date": null,
+      "judges": "Hon'ble Justice A.K. Chawla",
+      "acts_sections": "Commercial Courts Act, 2015 — Recovery of dues",
+      "summary": "Commercial suit for recovery of Rs. 45 lakhs arising from breach of supply contract.",
+      "source": "sample",
+      "hearings": [
+        {"business_date": "2025-11-10", "hearing_date": "2025-11-10", "judge": "Justice A.K. Chawla", "purpose": "Arguments"},
+        {"business_date": "2026-02-18", "hearing_date": "2026-02-18", "judge": "Justice A.K. Chawla", "purpose": "Arguments"},
+        {"business_date": "2026-07-15", "hearing_date": "2026-07-15", "judge": "Justice A.K. Chawla", "purpose": "Final Arguments"}
+      ],
+      "orders": [
+        {"order_date": "2020-06-12", "order_number": "1", "order_details": "Notice issued to respondent. Reply filed."},
+        {"order_date": "2023-09-05", "order_number": "12", "order_details": "Issues framed. Matter listed for evidence."}
+      ]
+    },
+    {
+      "id": "cnr-kahc020045672021",
+      "cnr": "KAHC020045672021",
+      "case_type": "CRL.P. 789/2021",
+      "case_number": "789/2021",
+      "filing_number": "CRL-P-102/2021",
+      "court": "Karnataka High Court",
+      "court_complex": "High Court of Karnataka, Bengaluru",
+      "state": "Karnataka",
+      "district": "Bengaluru Urban",
+      "status": "Pending",
+      "stage": "Admission",
+      "petitioner": "Anita Reddy",
+      "respondent": "State of Karnataka",
+      "filing_date": "08-01-2021",
+      "registration_date": "12-01-2021",
+      "next_hearing_date": "2026-06-25",
+      "decision_date": null,
+      "judges": "Hon'ble Justice Krishna S. Dixit",
+      "acts_sections": "CrPC Section 482 — Quashing of FIR",
+      "summary": "Petition under Section 482 CrPC seeking quashing of FIR No. 145/2020 registered at Koramangala Police Station.",
+      "source": "sample",
+      "hearings": [
+        {"business_date": "2025-08-20", "hearing_date": "2025-08-20", "judge": "Justice Krishna S. Dixit", "purpose": "Admission"},
+        {"business_date": "2026-06-25", "hearing_date": "2026-06-25", "judge": "Justice Krishna S. Dixit", "purpose": "Hearing"}
+      ],
+      "orders": [
+        {"order_date": "2021-03-15", "order_number": "3", "order_details": "Notice issued to State. Stay of investigation granted."}
+      ]
+    },
+    {
+      "id": "cnr-mhdc030078902019",
+      "cnr": "MHDC030078902019",
+      "case_type": "P.C.S. 456/2019",
+      "case_number": "456/2019",
+      "filing_number": "PCS-890/2019",
+      "court": "District Court, Mumbai",
+      "court_complex": "City Civil Court, Mumbai",
+      "state": "Maharashtra",
+      "district": "Mumbai",
+      "status": "Disposed",
+      "stage": "Decreed",
+      "petitioner": "Priya Sharma",
+      "respondent": "Rajesh Sharma",
+      "filing_date": "20-05-2019",
+      "registration_date": "28-05-2019",
+      "next_hearing_date": null,
+      "decision_date": "2024-12-10",
+      "judges": "Shri V.D. Patil, Civil Judge (Senior Division)",
+      "acts_sections": "Hindu Marriage Act, 1955 — Section 13B",
+      "summary": "Mutual consent divorce petition. Decree granted on 10-12-2024.",
+      "source": "sample",
+      "hearings": [
+        {"business_date": "2024-06-18", "hearing_date": "2024-06-18", "judge": "Shri V.D. Patil", "purpose": "Second Motion"},
+        {"business_date": "2024-12-10", "hearing_date": "2024-12-10", "judge": "Shri V.D. Patil", "purpose": "Decree"}
+      ],
+      "orders": [
+        {"order_date": "2024-12-10", "order_number": "Final", "order_details": "Decree of divorce granted by mutual consent."}
+      ]
+    }
   ]
 }

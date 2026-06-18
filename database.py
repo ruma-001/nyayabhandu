@@ -84,6 +84,39 @@ def init_db() -> None:
         CREATE INDEX IF NOT EXISTS idx_proformas_state ON proformas(state);
         CREATE INDEX IF NOT EXISTS idx_proformas_case_type ON proformas(case_type);
         CREATE INDEX IF NOT EXISTS idx_outlines_state ON filing_outlines(state);
+
+        CREATE TABLE IF NOT EXISTS cases (
+            id TEXT PRIMARY KEY,
+            cnr TEXT UNIQUE NOT NULL,
+            case_type TEXT,
+            case_number TEXT,
+            filing_number TEXT,
+            court TEXT,
+            court_complex TEXT,
+            state TEXT,
+            district TEXT,
+            status TEXT,
+            stage TEXT,
+            petitioner TEXT,
+            respondent TEXT,
+            filing_date TEXT,
+            registration_date TEXT,
+            next_hearing_date TEXT,
+            decision_date TEXT,
+            judges TEXT,
+            acts_sections TEXT,
+            summary TEXT,
+            judgment_id TEXT,
+            source TEXT,
+            raw_json TEXT,
+            hearings_json TEXT,
+            orders_json TEXT,
+            fetched_at TEXT
+        );
+
+        CREATE INDEX IF NOT EXISTS idx_cases_cnr ON cases(cnr);
+        CREATE INDEX IF NOT EXISTS idx_cases_status ON cases(status);
+        CREATE INDEX IF NOT EXISTS idx_cases_petitioner ON cases(petitioner);
         """
     )
     conn.commit()
@@ -91,6 +124,10 @@ def init_db() -> None:
     count = conn.execute("SELECT COUNT(*) FROM judgments").fetchone()[0]
     if count == 0:
         _seed_database(conn)
+    else:
+        case_count = conn.execute("SELECT COUNT(*) FROM cases").fetchone()[0]
+        if case_count == 0:
+            _seed_cases_only(conn)
     conn.close()
 
 
@@ -153,6 +190,9 @@ def _seed_database(conn: sqlite3.Connection) -> None:
             ),
         )
 
+    if "cases" in data:
+        _insert_cases(conn, data["cases"])
+
     for o in data["filing_outlines"]:
         conn.execute(
             """
@@ -176,6 +216,55 @@ def _seed_database(conn: sqlite3.Connection) -> None:
             ),
         )
 
+    conn.commit()
+
+
+def _seed_cases_only(conn: sqlite3.Connection) -> None:
+    with open(SEED_PATH, encoding="utf-8") as f:
+        data = json.load(f)
+    if "cases" in data:
+        _insert_cases(conn, data["cases"])
+
+
+def _insert_cases(conn: sqlite3.Connection, items: list[dict]) -> None:
+    for c in items:
+        conn.execute(
+            """
+            INSERT OR IGNORE INTO cases
+            (id, cnr, case_type, case_number, filing_number, court, court_complex,
+             state, district, status, stage, petitioner, respondent, filing_date,
+             registration_date, next_hearing_date, decision_date, judges, acts_sections,
+             summary, judgment_id, source, hearings_json, orders_json, fetched_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                c["id"],
+                c["cnr"],
+                c.get("case_type"),
+                c.get("case_number"),
+                c.get("filing_number"),
+                c.get("court"),
+                c.get("court_complex"),
+                c.get("state"),
+                c.get("district"),
+                c.get("status"),
+                c.get("stage"),
+                c.get("petitioner"),
+                c.get("respondent"),
+                c.get("filing_date"),
+                c.get("registration_date"),
+                c.get("next_hearing_date"),
+                c.get("decision_date"),
+                c.get("judges"),
+                c.get("acts_sections"),
+                c.get("summary"),
+                c.get("judgment_id"),
+                c.get("source", "sample"),
+                json.dumps(c.get("hearings", [])),
+                json.dumps(c.get("orders", [])),
+                c.get("fetched_at", "2026-01-01T00:00:00Z"),
+            ),
+        )
     conn.commit()
 
 

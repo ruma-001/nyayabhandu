@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block title %}Case Tracker{% endblock %}
+
+{% block content %}
+<section class="detail-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="/">Home</a> / Case Tracker</div>
+    <h1>Case Tracker</h1>
+    <p style="color:var(--text-muted);max-width:720px;">
+      Track pending and disposed cases by CNR number or party name. Search live eCourts data when API key is configured, or browse cached and sample cases.
+    </p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    {% if notice %}
+    <div class="card" style="padding:1rem 1.25rem;margin-bottom:1.5rem;border-left:4px solid var(--gold);background:#fffbeb;">
+      <strong>Note:</strong> {{ notice }}
+    </div>
+    {% endif %}
+
+    {% if error %}
+    <div class="card" style="padding:1rem 1.25rem;margin-bottom:1.5rem;border-left:4px solid #dc2626;background:#fef2f2;">
+      <strong>{{ error }}</strong>
+      {% if help %}<p style="margin:0.5rem 0 0;color:var(--text-muted);font-size:0.9rem;">{{ help }}</p>{% endif %}
+    </div>
+    {% endif %}
+
+    <form class="filters-bar" method="get" action="/cases">
+      <div class="filter-group" style="flex:2;">
+        <label>CNR Number</label>
+        <input type="text" name="cnr" value="{{ cnr }}" placeholder="16-digit CNR e.g. DLHC010012342020" maxlength="20" style="text-transform:uppercase;">
+      </div>
+      <div class="filter-group" style="flex:2;">
+        <label>Party / Case Search</label>
+        <input type="text" name="q" value="{{ q }}" placeholder="Party name, case number, court...">
+      </div>
+      <div class="filter-group">
+        <label>Status</label>
+        <select name="status">
+          <option value="">All</option>
+          <option value="pending" {% if status == 'pending' %}selected{% endif %}>Pending</option>
+          <option value="disposed" {% if status == 'disposed' %}selected{% endif %}>Disposed</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Search</button>
+      {% if cnr %}
+      <button type="submit" name="refresh" value="1" class="btn btn-outline">Refresh Live</button>
+      {% endif %}
+    </form>
+
+    <div class="card" style="padding:1rem 1.25rem;margin-bottom:2rem;font-size:0.9rem;color:var(--text-muted);">
+      <strong style="color:var(--navy);">CNR format:</strong> 16 alphanumeric characters assigned when a case is filed in eCourts.
+      Found on your vakalatnama, court notice, or cause list.
+      <br><strong style="color:var(--navy);">Live lookup:</strong> Set <code>ECOURTSINDIA_API_KEY</code> in your environment.
+      <a href="https://ecourtsindia.com/api" target="_blank" rel="noopener">Get API key →</a>
+    </div>
+
+    {% if case %}
+    <div class="card" style="padding:0;margin-bottom:2rem;overflow:hidden;">
+      <div style="padding:1.5rem;background:linear-gradient(135deg,var(--navy),var(--navy-light));color:white;">
+        <span class="card-tag" style="background:rgba(255,255,255,0.15);color:white;">{{ case.status }}</span>
+        <h2 style="color:white;font-size:1.35rem;margin:0.75rem 0 0.25rem;">{{ case.petitioner }} <span style="opacity:0.7;">vs</span> {{ case.respondent }}</h2>
+        <div style="opacity:0.85;font-size:0.9rem;">CNR: <strong>{{ case.cnr }}</strong> · {{ case.court }}</div>
+      </div>
+      <div style="padding:1.5rem;">
+        <div class="meta-grid">
+          <div class="meta-item"><div class="label">Case Type</div><div class="value">{{ case.case_type or '—' }}</div></div>
+          <div class="meta-item"><div class="label">Case Number</div><div class="value">{{ case.case_number or '—' }}</div></div>
+          <div class="meta-item"><div class="label">Stage</div><div class="value">{{ case.stage or '—' }}</div></div>
+          <div class="meta-item"><div class="label">Next Hearing</div><div class="value">{{ case.next_hearing_date or 'Not listed' }}</div></div>
+          <div class="meta-item"><div class="label">Filing Date</div><div class="value">{{ case.filing_date or '—' }}</div></div>
+          <div class="meta-item"><div class="label">Judge</div><div class="value">{{ case.judges or '—' }}</div></div>
+          <div class="meta-item"><div class="label">State / District</div><div class="value">{{ case.state or '—' }} / {{ case.district or '—' }}</div></div>
+          <div class="meta-item"><div class="label">Acts & Sections</div><div class="value">{{ case.acts_sections or '—' }}</div></div>
+        </div>
+        {% if case.summary %}
+        <p style="margin-top:1.25rem;color:var(--text-muted);">{{ case.summary }}</p>
+        {% endif %}
+        <div style="margin-top:1.5rem;">
+          <a href="/cases/{{ case.id }}" class="btn btn-primary">Full Case History →</a>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if results %}
+    <p class="results-count">{{ results|length }} case{% if results|length != 1 %}s{% endif %} found{% if source %} ({{ source }}){% endif %}</p>
+    <div class="card-grid">
+      {% for c in results %}
+      <article class="card">
+        <span class="card-tag">{{ c.status }}</span>
+        <h3><a href="/cases/{{ c.id }}">{{ c.petitioner }} vs {{ c.respondent }}</a></h3>
+        <div class="card-meta">CNR: {{ c.cnr }} · {{ c.court }}</div>
+        <p class="card-summary">
+          {{ c.case_type or 'Case' }}
+          {% if c.next_hearing_date %} · Next: {{ c.next_hearing_date }}{% endif %}
+          {% if c.stage %} · {{ c.stage }}{% endif %}
+        </p>
+      </article>
+      {% endfor %}
+    </div>
+    {% elif not case and (q or cnr) %}
+    <div class="empty-state">
+      <h3>No cases found</h3>
+      <p>Try a sample CNR: <a href="/cases?cnr=DLHC010012342020">DLHC010012342020</a></p>
+    </div>
+    {% else %}
+    <h2 class="section-title" style="font-size:1.25rem;">Recent & Sample Cases</h2>
+    <div class="card-grid">
+      {% for c in recent %}
+      <article class="card">
+        <span class="card-tag">{{ c.status }}</span>
+        <h3><a href="/cases/{{ c.id }}">{{ c.petitioner }} vs {{ c.respondent }}</a></h3>
+        <div class="card-meta">CNR: {{ c.cnr }} · {{ c.court }}</div>
+        <p class="card-summary">{{ c.case_type }} · {{ c.state }}</p>
+      </article>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

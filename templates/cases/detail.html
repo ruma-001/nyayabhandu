@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}{{ case.petitioner }} vs {{ case.respondent }}{% endblock %}
+
+{% block content %}
+<section class="detail-header">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="/">Home</a> / <a href="/cases">Case Tracker</a> / {{ case.cnr }}
+    </div>
+    <span class="card-tag">{{ case.status }}</span>
+    <h1>{{ case.petitioner }} <span style="color:var(--text-muted);font-weight:400;">vs</span> {{ case.respondent }}</h1>
+    <div class="meta-grid">
+      <div class="meta-item"><div class="label">CNR Number</div><div class="value"><strong>{{ case.cnr }}</strong></div></div>
+      <div class="meta-item"><div class="label">Court</div><div class="value">{{ case.court }}</div></div>
+      <div class="meta-item"><div class="label">Case Type</div><div class="value">{{ case.case_type or '—' }}</div></div>
+      <div class="meta-item"><div class="label">Case Number</div><div class="value">{{ case.case_number or '—' }}</div></div>
+      <div class="meta-item"><div class="label">Filing Number</div><div class="value">{{ case.filing_number or '—' }}</div></div>
+      <div class="meta-item"><div class="label">Stage</div><div class="value">{{ case.stage or '—' }}</div></div>
+      <div class="meta-item"><div class="label">Filing Date</div><div class="value">{{ case.filing_date or '—' }}</div></div>
+      <div class="meta-item"><div class="label">Registration Date</div><div class="value">{{ case.registration_date or '—' }}</div></div>
+      <div class="meta-item"><div class="label">Next Hearing</div><div class="value">{{ case.next_hearing_date or 'Not listed' }}</div></div>
+      <div class="meta-item"><div class="label">Decision Date</div><div class="value">{{ case.decision_date or '—' }}</div></div>
+      <div class="meta-item"><div class="label">Judge</div><div class="value">{{ case.judges or '—' }}</div></div>
+      <div class="meta-item"><div class="label">Acts & Sections</div><div class="value">{{ case.acts_sections or '—' }}</div></div>
+    </div>
+    {% if case.summary %}
+    <p style="margin-top:1rem;color:var(--text-muted);">{{ case.summary }}</p>
+    {% endif %}
+  </div>
+</section>
+
+<section class="detail-content">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;">
+      <div>
+        <h2 class="section-title" style="font-size:1.25rem;">Hearing History</h2>
+        {% if case.hearings %}
+        <div class="steps-timeline" style="margin-top:1.5rem;">
+          {% for h in case.hearings %}
+          <div class="step-item">
+            <div class="step-number">{{ h.hearing_date or h.business_date }}</div>
+            <div class="step-title">{{ h.purpose or 'Hearing' }}</div>
+            <div class="step-detail">{% if h.judge %}Judge: {{ h.judge }}{% endif %}</div>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p style="color:var(--text-muted);">No hearing history available.</p>
+        {% endif %}
+      </div>
+
+      <div>
+        <h2 class="section-title" style="font-size:1.25rem;">Court Orders</h2>
+        {% if case.orders %}
+        <ul class="citation-list" style="margin-top:1rem;">
+          {% for o in case.orders %}
+          <li class="citation-item" style="flex-direction:column;align-items:flex-start;">
+            <strong>Order {{ o.order_number or '—' }} — {{ o.order_date or 'Undated' }}</strong>
+            <div style="font-size:0.9rem;color:var(--text-muted);margin-top:0.35rem;">{{ o.order_details }}</div>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p style="color:var(--text-muted);">No orders on record.</p>
+        {% endif %}
+
+        <div class="card" style="margin-top:2rem;">
+          <h3 style="font-size:1rem;margin-bottom:0.75rem;">Refresh Status</h3>
+          <p style="font-size:0.9rem;color:var(--text-muted);margin-bottom:1rem;">
+            Last fetched: {{ case.fetched_at or 'Unknown' }} · Source: {{ case.source or 'local' }}
+          </p>
+          <a href="/cases?cnr={{ case.cnr }}&refresh=1" class="btn btn-gold">Fetch Live Update</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

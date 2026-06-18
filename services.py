@@ -268,6 +268,14 @@ def get_outline_filters() -> dict:
     }
 
 
+def _table_exists(conn, name: str) -> bool:
+    row = conn.execute(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name=?",
+        (name,),
+    ).fetchone()
+    return row is not None
+
+
 def get_stats() -> dict:
     conn = get_connection()
     stats = {
@@ -281,6 +289,9 @@ def get_stats() -> dict:
         "states": conn.execute(
             "SELECT COUNT(DISTINCT state) FROM filing_outlines"
         ).fetchone()[0],
+        "cases": conn.execute("SELECT COUNT(*) FROM cases").fetchone()[0]
+        if _table_exists(conn, "cases")
+        else 0,
     }
     conn.close()
     return stats

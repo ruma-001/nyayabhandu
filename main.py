@@ -8,6 +8,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from database import init_db
+from case_services import get_case, list_recent_cases, lookup_cnr, search_cases
 from services import (
     get_citations_for,
     get_filter_options,
@@ -154,6 +155,64 @@ async def filing_guides_page(
     )
 
 
+@app.get("/cases", response_class=HTMLResponse)
+async def cases_page(
+    request: Request,
+    cnr: str = "",
+    q: str = "",
+    status: str = "",
+    refresh: str = "",
+):
+    case = None
+    results = []
+    source = ""
+    error = ""
+    notice = ""
+    help_text = ""
+
+    if cnr:
+        data = lookup_cnr(cnr, refresh=bool(refresh))
+        if "case" in data:
+            case = data["case"]
+            notice = data.get("notice", "")
+        else:
+            error = data.get("error", "Case not found")
+            help_text = data.get("help", "")
+    elif q or status:
+        data = search_cases(query=q, status=status, live=bool(q))
+        results = data.get("results", [])
+        source = data.get("source", "")
+
+    recent = list_recent_cases(6) if not case and not results else []
+
+    return templates.TemplateResponse(
+        request,
+        "cases/index.html",
+        {
+            "case": case,
+            "results": results,
+            "recent": recent,
+            "cnr": cnr,
+            "q": q,
+            "status": status,
+            "source": source,
+            "error": error,
+            "notice": notice,
+            "help": help_text,
+        },
+    )
+
+
+@app.get("/cases/{case_id}", response_class=HTMLResponse)
+async def case_detail(request: Request, case_id: str):
+    case = get_case(case_id)
+    if not case:
+        return templates.TemplateResponse(request, "404.html", status_code=404)
+    return templates.TemplateResponse(
+        request, "cases/detail.html", {"case": case}
+    )
+
+
 @app.get("/filing-guides/{outline_id}", response_class=HTMLResponse)
 async def filing_guide_detail(request: Request, outline_id: str):
     outline = get_outline(outline_id)
@@ -205,6 +264,34 @@ async def api_proformas(case_type: str = "", state: str = "", q: str = ""):
 @app.get("/api/filing-guides")
 async def api_filing_guides(case_type: str = "", state: str = "", q: str = ""):
     return search_outlines(case_type=case_type, state=state, query=q)
+
+
+@app.get("/api/cases/lookup")
+async def api_case_lookup(cnr: str = "", refresh: bool = False):
+    if not cnr:
+        return JSONResponse({"error": "CNR required"}, status_code=400)
+    data = lookup_cnr(cnr, refresh=refresh)
+    if "case" not in data:
+        return JSONResponse(data, status_code=404)
+    return data
+
+
+@app.get("/api/cases/search")
+async def api_case_search(
+    q: str = "",
+    status: str = "",
+    live: bool = False,
+    limit: int = Query(default=50, le=100),
+):
+    return search_cases(query=q, status=status, limit=limit, live=live)
+
+
+@app.get("/api/cases/{case_id}")
+async def api_case(case_id: str):
+    case = get_case(case_id)
+    if not case:
+        return JSONResponse({"error": "Not found"}, status_code=404)
+    return case
 
 
 @app.get("/api/stats")
