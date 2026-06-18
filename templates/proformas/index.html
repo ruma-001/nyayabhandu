@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Legal Proformas{% endblock %}
+
+{% block content %}
+<section class="detail-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="/">Home</a> / Proformas</div>
+    <h1>Legal Proformas</h1>
+    <p style="color:var(--text-muted);max-width:600px;">Ready-to-use legal document templates for every case type and state. Copy, customize, and file.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <form class="filters-bar" method="get" action="/proformas">
+      <div class="filter-group" style="flex:2;">
+        <label>Search</label>
+        <input type="text" name="q" value="{{ q }}" placeholder="Search templates...">
+      </div>
+      <div class="filter-group">
+        <label>Case Type</label>
+        <select name="case_type">
+          <option value="">All Types</option>
+          {% for ct in filters.case_types %}
+          <option value="{{ ct }}" {% if case_type == ct %}selected{% endif %}>{{ ct }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>State</label>
+        <select name="state">
+          <option value="">All States</option>
+          {% for s in filters.states %}
+          <option value="{{ s }}" {% if state == s %}selected{% endif %}>{{ s }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Filter</button>
+    </form>
+
+    <p class="results-count">{{ results|length }} proforma{% if results|length != 1 %}s{% endif %} available</p>
+
+    {% if results %}
+    <div class="card-grid">
+      {% for p in results %}
+      <article class="card">
+        <span class="card-tag">{{ p.case_type }} · {{ p.state }}</span>
+        <h3><a href="/proformas/{{ p.id }}">{{ p.title }}</a></h3>
+        <div class="card-meta">{{ p.court_level }}</div>
+        {% if p.description %}
+        <p class="card-summary">{{ p.description }}</p>
+        {% endif %}
+        <div class="tag-list">
+          {% for tag in p.tags %}
+          <span class="tag">{{ tag }}</span>
+          {% endfor %}
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <h3>No proformas found</h3>
+      <p>Try a different case type or state filter.</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

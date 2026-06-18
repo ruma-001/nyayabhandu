@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}NyayaSetu{% endblock %} — India's Legal Research Platform</title>
+  <meta name="description" content="Search Indian court judgments, find case citations, download legal proformas, and get state-wise filing guides for lawyers.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css">
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="logo">
+        <div class="logo-icon">⚖</div>
+        Nyaya<span>Setu</span>
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="/judgments">Judgments</a></li>
+          <li><a href="/citations">Citations</a></li>
+          <li><a href="/proformas">Proformas</a></li>
+          <li><a href="/filing-guides">Filing Guides</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h4>NyayaSetu</h4>
+          <p style="font-size:0.9rem;line-height:1.6;">Your bridge to justice — comprehensive legal research, citations, proformas, and filing guides for Indian courts.</p>
+        </div>
+        <div>
+          <h4>Research</h4>
+          <ul>
+            <li><a href="/judgments">Court Judgments</a></li>
+            <li><a href="/citations">Citation Finder</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Practice</h4>
+          <ul>
+            <li><a href="/proformas">Legal Proformas</a></li>
+            <li><a href="/filing-guides">Filing Guides</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Coverage</h4>
+          <ul>
+            <li>Supreme Court of India</li>
+            <li>All High Courts</li>
+            <li>28 States & UTs</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 NyayaSetu. Built for the Indian legal community.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/static/js/app.js"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

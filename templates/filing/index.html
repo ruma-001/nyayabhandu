@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Filing Guides{% endblock %}
+
+{% block content %}
+<section class="detail-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="/">Home</a> / Filing Guides</div>
+    <h1>Filing Guides</h1>
+    <p style="color:var(--text-muted);max-width:600px;">Step-by-step outlines for filing cases across India — documents, court fees, limitation periods, and practical tips by state and case type.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <form class="filters-bar" method="get" action="/filing-guides">
+      <div class="filter-group" style="flex:2;">
+        <label>Search</label>
+        <input type="text" name="q" value="{{ q }}" placeholder="Search guides...">
+      </div>
+      <div class="filter-group">
+        <label>Case Type</label>
+        <select name="case_type">
+          <option value="">All Types</option>
+          {% for ct in filters.case_types %}
+          <option value="{{ ct }}" {% if case_type == ct %}selected{% endif %}>{{ ct }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>State</label>
+        <select name="state">
+          <option value="">All States</option>
+          {% for s in filters.states %}
+          <option value="{{ s }}" {% if state == s %}selected{% endif %}>{{ s }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Filter</button>
+    </form>
+
+    <p class="results-count">{{ results|length }} guide{% if results|length != 1 %}s{% endif %} available</p>
+
+    {% if results %}
+    <div class="card-grid">
+      {% for o in results %}
+      <article class="card">
+        <span class="card-tag">{{ o.case_type }} · {{ o.state }}</span>
+        <h3><a href="/filing-guides/{{ o.id }}">{{ o.title }}</a></h3>
+        <div class="card-meta">{{ o.court }}</div>
+        <p class="card-summary">{{ o.steps|length }} steps · Limitation: {{ o.limitation_period or 'See guide' }}</p>
+        <a href="/filing-guides/{{ o.id }}" class="btn btn-outline" style="margin-top:1rem;font-size:0.85rem;">View Full Guide →</a>
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <h3>No filing guides found</h3>
+      <p>Try a different state or case type.</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

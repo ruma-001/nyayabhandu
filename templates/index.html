@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero-content">
+    <h1>India's <em>Go-To</em> Legal Research Platform</h1>
+    <p>Search judgments from Supreme Court and High Courts, trace case citations, download proformas, and get step-by-step filing guides — all in one place.</p>
+
+    <form id="hero-search" class="search-box">
+      <input type="text" name="q" placeholder="Search judgments by case name, citation, or keywords..." autocomplete="off">
+      <button type="submit">Search</button>
+    </form>
+    <div class="search-tabs">
+      <button type="button" class="search-tab active" data-type="judgments">Judgments</button>
+      <button type="button" class="search-tab" data-type="citations">Citations</button>
+      <button type="button" class="search-tab" data-type="proformas">Proformas</button>
+      <button type="button" class="search-tab" data-type="guides">Filing Guides</button>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="number">{{ stats.judgments }}+</div>
+      <div class="label">Judgments</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">{{ stats.citations }}+</div>
+      <div class="label">Citation Links</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">{{ stats.proformas }}</div>
+      <div class="label">Proformas</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">{{ stats.outlines }}</div>
+      <div class="label">Filing Guides</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">{{ stats.courts }}</div>
+      <div class="label">Courts Covered</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">{{ stats.states }}</div>
+      <div class="label">States & UTs</div>
+    </div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">Everything a Lawyer Needs</h2>
+    <p class="section-subtitle">From research to filing — streamline your legal practice</p>
+    <div class="features-grid">
+      <div class="feature-card card">
+        <div class="feature-icon">📚</div>
+        <h3>Judgment Database</h3>
+        <p>Search landmark and recent judgments from the Supreme Court and High Courts. Filter by court, year, and subject matter.</p>
+        <a href="/judgments" class="btn btn-primary" style="margin-top:1rem;">Browse Judgments</a>
+      </div>
+      <div class="feature-card card">
+        <div class="feature-icon">🔗</div>
+        <h3>Citation Graph</h3>
+        <p>Trace how cases cite each other. See which judgments followed, distinguished, or overruled a precedent.</p>
+        <a href="/citations" class="btn btn-primary" style="margin-top:1rem;">Find Citations</a>
+      </div>
+      <div class="feature-card card">
+        <div class="feature-icon">📄</div>
+        <h3>Legal Proformas</h3>
+        <p>Ready-to-use templates for plaints, bail applications, writ petitions, and more — customized by state and case type.</p>
+        <a href="/proformas" class="btn btn-primary" style="margin-top:1rem;">View Proformas</a>
+      </div>
+      <div class="feature-card card">
+        <div class="feature-icon">📋</div>
+        <h3>Filing Outlines</h3>
+        <p>Step-by-step guides for filing cases in every state — documents needed, court fees, limitation periods, and pro tips.</p>
+        <a href="/filing-guides" class="btn btn-primary" style="margin-top:1rem;">Explore Guides</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:white;">
+  <div class="container">
+    <h2 class="section-title">Landmark Judgments</h2>
+    <p class="section-subtitle">Foundational cases that shaped Indian jurisprudence</p>
+    <div class="card-grid">
+      {% for j in featured %}
+      <article class="card">
+        <span class="card-tag">{{ j.subject }}</span>
+        <h3><a href="/judgments/{{ j.id }}">{{ j.title }}</a></h3>
+        <div class="card-meta">{{ j.citation }} · {{ j.court }} · {{ j.year }}</div>
+        <p class="card-summary">{{ j.summary }}</p>
+      </article>
+      {% endfor %}
+    </div>
+    <div style="text-align:center;margin-top:2rem;">
+      <a href="/judgments" class="btn btn-outline">View All Judgments →</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

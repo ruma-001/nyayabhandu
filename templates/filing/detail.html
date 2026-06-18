@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}{{ outline.title }}{% endblock %}
+
+{% block content %}
+<section class="detail-header">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="/">Home</a> / <a href="/filing-guides">Filing Guides</a> / {{ outline.title }}
+    </div>
+    <span class="card-tag">{{ outline.case_type }} · {{ outline.state }}</span>
+    <h1>{{ outline.title }}</h1>
+    <div class="meta-grid">
+      <div class="meta-item">
+        <div class="label">Court</div>
+        <div class="value">{{ outline.court }}</div>
+      </div>
+      <div class="meta-item">
+        <div class="label">Limitation Period</div>
+        <div class="value">{{ outline.limitation_period or '—' }}</div>
+      </div>
+      <div class="meta-item">
+        <div class="label">Court Fee</div>
+        <div class="value">{{ outline.court_fee or '—' }}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="detail-content">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:2rem;">
+      <div>
+        <h2 class="section-title" style="font-size:1.25rem;">Filing Steps</h2>
+        <div class="steps-timeline" style="margin-top:1.5rem;">
+          {% for step in outline.steps %}
+          <div class="step-item">
+            <div class="step-number">Step {{ step.step }}</div>
+            <div class="step-title">{{ step.title }}</div>
+            <div class="step-detail">{{ step.detail }}</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div>
+        {% if outline.documents_required %}
+        <div class="card" style="margin-bottom:1.5rem;">
+          <h3 style="font-size:1rem;margin-bottom:1rem;">Documents Required</h3>
+          <ul style="list-style:none;font-size:0.9rem;color:var(--text-muted);">
+            {% for doc in outline.documents_required %}
+            <li style="padding:0.4rem 0;border-bottom:1px solid var(--border);">✓ {{ doc }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+
+        {% if outline.relevant_acts %}
+        <div class="card" style="margin-bottom:1.5rem;">
+          <h3 style="font-size:1rem;margin-bottom:1rem;">Relevant Acts</h3>
+          <div class="tag-list">
+            {% for act in outline.relevant_acts %}
+            <span class="tag">{{ act }}</span>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+
+        {% if outline.tips %}
+        <div class="card">
+          <h3 style="font-size:1rem;margin-bottom:1rem;">Pro Tips</h3>
+          <ul style="list-style:none;font-size:0.9rem;color:var(--text-muted);">
+            {% for tip in outline.tips %}
+            <li style="padding:0.5rem 0;">💡 {{ tip }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div style="margin-top:2.5rem;display:flex;gap:1rem;flex-wrap:wrap;">
+      <a href="/proformas?case_type={{ outline.case_type }}&state={{ outline.state }}" class="btn btn-primary">Download Proformas</a>
+      <a href="/filing-guides?state={{ outline.state }}" class="btn btn-outline">More {{ outline.state }} Guides</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Citation Finder{% endblock %}
+
+{% block content %}
+<section class="detail-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="/">Home</a> / Citations</div>
+    <h1>Citation Finder</h1>
+    <p style="color:var(--text-muted);max-width:600px;">Look up any case by its citation — SCC, AIR, SCR, or neutral citations. Trace the citation network across Indian courts.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <form class="filters-bar" method="get" action="/citations">
+      <div class="filter-group" style="flex:3;">
+        <label>Citation</label>
+        <input type="text" name="q" value="{{ q }}" placeholder="e.g. (1973) 4 SCC 225, AIR 1978 SC 597, (2015) 5 SCC 1..." autofocus>
+      </div>
+      <button type="submit" class="btn btn-primary">Find Case</button>
+    </form>
+
+    {% if q %}
+    <p class="results-count">{{ results|length }} case{% if results|length != 1 %}s{% endif %} matching "{{ q }}"</p>
+
+    {% if results %}
+    <div class="card-grid">
+      {% for j in results %}
+      <article class="card">
+        <span class="card-tag">{{ j.subject }}</span>
+        <h3><a href="/judgments/{{ j.id }}">{{ j.title }}</a></h3>
+        <div class="card-meta"><strong>{{ j.citation }}</strong> · {{ j.court }} · {{ j.year }}</div>
+        <p class="card-summary">{{ j.summary }}</p>
+        <a href="/judgments/{{ j.id }}" class="btn btn-outline" style="margin-top:1rem;font-size:0.85rem;">View Citations Graph →</a>
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <h3>No cases found for this citation</h3>
+      <p>Try a partial citation like "4 SCC 225" or search by case name in <a href="/judgments">Judgments</a>.</p>
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="card" style="padding:2rem;">
+      <h3 style="margin-bottom:1rem;">How to use the Citation Finder</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem;color:var(--text-muted);">
+        <div>
+          <strong style="color:var(--navy);">SCC Citations</strong>
+          <p style="margin-top:0.5rem;font-size:0.9rem;">(1973) 4 SCC 225<br>(2015) 5 SCC 1</p>
+        </div>
+        <div>
+          <strong style="color:var(--navy);">AIR Citations</strong>
+          <p style="margin-top:0.5rem;font-size:0.9rem;">AIR 1978 SC 597<br>AIR 1997 SC 3011</p>
+        </div>
+        <div>
+          <strong style="color:var(--navy);">Neutral Citations</strong>
+          <p style="margin-top:0.5rem;font-size:0.9rem;">2020 SCC OnLine SC 698<br>2019 SCC OnLine SC 1440</p>
+        </div>
+      </div>
+      <p style="margin-top:1.5rem;font-size:0.9rem;color:var(--text-muted);">Once you find a case, open it to see the full citation graph — which cases cited it and which precedents it relied upon.</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

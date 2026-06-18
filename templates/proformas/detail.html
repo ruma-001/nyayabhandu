@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}{{ proforma.title }}{% endblock %}
+
+{% block content %}
+<section class="detail-header">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="/">Home</a> / <a href="/proformas">Proformas</a> / {{ proforma.title }}
+    </div>
+    <span class="card-tag">{{ proforma.case_type }} · {{ proforma.state }}</span>
+    <h1>{{ proforma.title }}</h1>
+    <div class="meta-grid">
+      <div class="meta-item">
+        <div class="label">Court Level</div>
+        <div class="value">{{ proforma.court_level }}</div>
+      </div>
+      <div class="meta-item">
+        <div class="label">State</div>
+        <div class="value">{{ proforma.state }}</div>
+      </div>
+      <div class="meta-item">
+        <div class="label">Case Type</div>
+        <div class="value">{{ proforma.case_type }}</div>
+      </div>
+    </div>
+    {% if proforma.description %}
+    <p style="margin-top:1rem;color:var(--text-muted);">{{ proforma.description }}</p>
+    {% endif %}
+  </div>
+</section>
+
+<section class="detail-content">
+  <div class="container">
+    <div class="copy-bar">
+      <h2 style="font-size:1.25rem;">Template</h2>
+      <button class="btn btn-gold" onclick="copyToClipboard(document.getElementById('proforma-text').textContent, this)">Copy to Clipboard</button>
+    </div>
+    <div class="proforma-content" id="proforma-text">{{ proforma.content }}</div>
+    <div class="tag-list" style="margin-top:1rem;">
+      {% for tag in proforma.tags %}
+      <span class="tag">{{ tag }}</span>
+      {% endfor %}
+    </div>
+    <div style="margin-top:2rem;">
+      <a href="/filing-guides?case_type={{ proforma.case_type }}&state={{ proforma.state }}" class="btn btn-outline">View Filing Guide for {{ proforma.state }} →</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

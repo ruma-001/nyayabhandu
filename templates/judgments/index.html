@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Judgments{% endblock %}
+
+{% block content %}
+<section class="detail-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="/">Home</a> / Judgments</div>
+    <h1>Court Judgments</h1>
+    <p style="color:var(--text-muted);max-width:600px;">Search and explore judgments from the Supreme Court of India and High Courts across all subjects.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <form class="filters-bar" method="get" action="/judgments">
+      <div class="filter-group" style="flex:2;">
+        <label>Search</label>
+        <input type="text" name="q" value="{{ q }}" placeholder="Case name, citation, parties, keywords...">
+      </div>
+      <div class="filter-group">
+        <label>Court</label>
+        <select name="court">
+          <option value="">All Courts</option>
+          {% for c in filters.courts %}
+          <option value="{{ c }}" {% if court == c %}selected{% endif %}>{{ c }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Year</label>
+        <select name="year">
+          <option value="">All Years</option>
+          {% for y in filters.years %}
+          <option value="{{ y }}" {% if year == y %}selected{% endif %}>{{ y }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Subject</label>
+        <select name="subject">
+          <option value="">All Subjects</option>
+          {% for s in filters.subjects %}
+          <option value="{{ s }}" {% if subject == s %}selected{% endif %}>{{ s }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    <p class="results-count">{{ results|length }} judgment{% if results|length != 1 %}s{% endif %} found</p>
+
+    {% if results %}
+    <div class="card-grid">
+      {% for j in results %}
+      <article class="card">
+        <span class="card-tag">{{ j.subject }}</span>
+        <h3><a href="/judgments/{{ j.id }}">{{ j.title }}</a></h3>
+        <div class="card-meta">{{ j.citation }} · {{ j.court }} · {{ j.date }}</div>
+        <p class="card-summary">{{ j.summary }}</p>
+        <div class="tag-list">
+          {% for kw in j.keywords[:4] %}
+          <span class="tag">{{ kw }}</span>
+          {% endfor %}
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <h3>No judgments found</h3>
+      <p>Try broadening your search or removing filters.</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
