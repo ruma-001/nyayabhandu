@@ -38,7 +38,7 @@
       <button type="submit" class="btn btn-primary">Filter</button>
     </form>
 
-    <p class="results-count">{{ results|length }} proforma{% if results|length != 1 %}s{% endif %} available</p>
+    <p class="results-count">{{ results|length }} proforma{% if results|length != 1 %}s{% endif %} available <span style="color:var(--text-muted);">({{ filters.states|length }} states, {{ filters.case_types|length }} case types in catalog)</span></p>
 
     {% if results %}
     <div class="card-grid">

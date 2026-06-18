@@ -47,7 +47,7 @@
       <button type="submit" class="btn btn-primary">Search</button>
     </form>
 
-    <p class="results-count">{{ results|length }} judgment{% if results|length != 1 %}s{% endif %} found</p>
+    <p class="results-count">{{ results|length }} judgment{% if results|length != 1 %}s{% endif %} found{% if court or subject or year %} <span style="color:var(--text-muted);">— filters show all courts/subjects; results depend on imported data</span>{% endif %}</p>
 
     {% if results %}
     <div class="card-grid">

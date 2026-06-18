@@ -1,0 +1,59 @@
+{
+  "_comment": "Copy this file and fill in your data. Then run: python import_data.py your_file.json",
+  "judgments": [
+    {
+      "id": "unique-case-id",
+      "title": "Petitioner v. Respondent",
+      "citation": "(2024) 1 SCC 100",
+      "court": "Supreme Court of India",
+      "bench": "3-Judge Bench",
+      "judges": "Judge A, Judge B, Judge C",
+      "date": "2024-01-15",
+      "year": 2024,
+      "case_number": "Civil Appeal No. 100 of 2024",
+      "petitioner": "Petitioner Name",
+      "respondent": "Respondent Name",
+      "subject": "Constitutional Law",
+      "summary": "Brief summary of the judgment holding.",
+      "full_text": "Optional longer excerpt or full text.",
+      "keywords": ["keyword1", "keyword2"]
+    }
+  ],
+  "citations": [
+    {
+      "citing_id": "unique-case-id",
+      "cited_id": "sc-1973-kesavananda",
+      "treatment": "Followed",
+      "context": "Why this case was cited."
+    }
+  ],
+  "proformas": [
+    {
+      "id": "pf-unique-id",
+      "title": "Plaint under Order VII CPC",
+      "case_type": "Civil",
+      "state": "Rajasthan",
+      "court_level": "District Court",
+      "description": "Standard plaint format for Rajasthan",
+      "content": "IN THE COURT OF...\n\n[Full template text here]",
+      "tags": ["plaint", "civil"]
+    }
+  ],
+  "filing_outlines": [
+    {
+      "id": "fo-unique-id",
+      "title": "Filing a Civil Suit in Rajasthan",
+      "case_type": "Civil",
+      "state": "Rajasthan",
+      "court": "District Court / Rajasthan High Court",
+      "limitation_period": "3 years for money recovery",
+      "court_fee": "As per Rajasthan Court Fees Act",
+      "documents_required": ["Plaint", "Vakalatnama", "Affidavit"],
+      "relevant_acts": ["Code of Civil Procedure, 1908"],
+      "steps": [
+        {"step": 1, "title": "Determine Jurisdiction", "detail": "Check territorial and pecuniary jurisdiction."}
+      ],
+      "tips": ["Check eCourts portal for online filing availability"]
+    }
+  ]
+}

@@ -3,6 +3,7 @@
 import json
 from typing import Any
 
+from catalog import _merge_unique, load_catalog
 from database import get_connection
 
 
@@ -139,19 +140,10 @@ def search_by_citation(citation: str) -> list[dict]:
 
 
 def get_filter_options() -> dict:
+    catalog = load_catalog()
     conn = get_connection()
-    courts = [
-        r[0]
-        for r in conn.execute(
-            "SELECT DISTINCT court FROM judgments ORDER BY court"
-        ).fetchall()
-    ]
-    subjects = [
-        r[0]
-        for r in conn.execute(
-            "SELECT DISTINCT subject FROM judgments ORDER BY subject"
-        ).fetchall()
-    ]
+    db_courts = [r[0] for r in conn.execute("SELECT DISTINCT court FROM judgments").fetchall()]
+    db_subjects = [r[0] for r in conn.execute("SELECT DISTINCT subject FROM judgments").fetchall()]
     years = [
         r[0]
         for r in conn.execute(
@@ -159,7 +151,11 @@ def get_filter_options() -> dict:
         ).fetchall()
     ]
     conn.close()
-    return {"courts": courts, "subjects": subjects, "years": years}
+    return {
+        "courts": _merge_unique(catalog["courts"], db_courts),
+        "subjects": _merge_unique(catalog["subjects"], db_subjects),
+        "years": years,
+    }
 
 
 def search_proformas(
@@ -207,21 +203,15 @@ def get_proforma(proforma_id: str) -> dict | None:
 
 
 def get_proforma_filters() -> dict:
+    catalog = load_catalog()
     conn = get_connection()
-    case_types = [
-        r[0]
-        for r in conn.execute(
-            "SELECT DISTINCT case_type FROM proformas ORDER BY case_type"
-        ).fetchall()
-    ]
-    states = [
-        r[0]
-        for r in conn.execute(
-            "SELECT DISTINCT state FROM proformas ORDER BY state"
-        ).fetchall()
-    ]
+    db_types = [r[0] for r in conn.execute("SELECT DISTINCT case_type FROM proformas").fetchall()]
+    db_states = [r[0] for r in conn.execute("SELECT DISTINCT state FROM proformas").fetchall()]
     conn.close()
-    return {"case_types": case_types, "states": states}
+    return {
+        "case_types": _merge_unique(catalog["case_types"], db_types),
+        "states": _merge_unique(catalog["states"], db_states),
+    }
 
 
 def search_outlines(
@@ -267,21 +257,15 @@ def get_outline(outline_id: str) -> dict | None:
 
 
 def get_outline_filters() -> dict:
+    catalog = load_catalog()
     conn = get_connection()
-    case_types = [
-        r[0]
-        for r in conn.execute(
-            "SELECT DISTINCT case_type FROM filing_outlines ORDER BY case_type"
-        ).fetchall()
-    ]
-    states = [
-        r[0]
-        for r in conn.execute(
-            "SELECT DISTINCT state FROM filing_outlines ORDER BY state"
-        ).fetchall()
-    ]
+    db_types = [r[0] for r in conn.execute("SELECT DISTINCT case_type FROM filing_outlines").fetchall()]
+    db_states = [r[0] for r in conn.execute("SELECT DISTINCT state FROM filing_outlines").fetchall()]
     conn.close()
-    return {"case_types": case_types, "states": states}
+    return {
+        "case_types": _merge_unique(catalog["case_types"], db_types),
+        "states": _merge_unique(catalog["states"], db_states),
+    }
 
 
 def get_stats() -> dict:
