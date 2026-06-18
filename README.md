@@ -1,4 +1,4 @@
-# NyayaSetu
+# NyayaBhandu
 
 India's legal research and practice platform — search court judgments, trace citations, download proformas, and get state-wise filing guides.
 
@@ -55,7 +55,7 @@ Each file can contain any of these top-level keys:
 
 ### Import from Indian Kanoon (automated)
 
-NyayaSetu includes a built-in Indian Kanoon importer.
+NyayaBhandu includes a built-in Indian Kanoon importer.
 
 1. **Get an API token** (recommended for bulk): https://api.indiankanoon.org/
 2. Set the token:

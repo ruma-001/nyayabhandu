@@ -1,4 +1,4 @@
-"""NyayaSetu — India's Legal Research & Practice Platform."""
+"""NyayaBhandu — India's Legal Research & Practice Platform."""
 
 from pathlib import Path
 
@@ -26,7 +26,7 @@ from services import (
 BASE_DIR = Path(__file__).parent
 
 app = FastAPI(
-    title="NyayaSetu",
+    title="NyayaBhandu",
     description="India's comprehensive legal research and practice platform",
     version="1.0.0",
 )

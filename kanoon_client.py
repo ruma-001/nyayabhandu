@@ -16,7 +16,7 @@ from bs4 import BeautifulSoup
 
 API_HOST = "api.indiankanoon.org"
 PUBLIC_HOST = "https://indiankanoon.org"
-USER_AGENT = "NyayaSetu/1.0 (+https://github.com/ruma-001/nyayasetu)"
+USER_AGENT = "NyayaBhandu/1.0 (+https://github.com/ruma-001/nyayabhandu)"
 
 COURT_DOCTYPES: dict[str, str] = {
     "supremecourt": "Supreme Court of India",

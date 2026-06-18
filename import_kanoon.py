@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Import judgments from Indian Kanoon into NyayaSetu.
+"""Import judgments from Indian Kanoon into NyayaBhandu.
 
 Uses the official API when INDIANKANOON_TOKEN is set (recommended for bulk imports).
 Falls back to the public website for small demo imports.
@@ -155,7 +155,7 @@ def run_import(args: argparse.Namespace) -> int:
     finally:
         conn.close()
 
-    print(f"\nImported {jcount} judgments, {ccount} citation links into NyayaSetu.")
+    print(f"\nImported {jcount} judgments, {ccount} citation links into NyayaBhandu.")
 
     if args.backup:
         _save_backup(Path(args.backup), judgments, citations)

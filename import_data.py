@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Bulk import judgments, proformas, and filing guides into NyayaSetu.
+"""Bulk import judgments, proformas, and filing guides into NyayaBhandu.
 
 Usage:
   python import_data.py data/seed.json              # import everything
@@ -172,7 +172,7 @@ def import_file(path: Path, data_type: str = "all") -> dict[str, int]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Import legal data into NyayaSetu")
+    parser = argparse.ArgumentParser(description="Import legal data into NyayaBhandu")
     parser.add_argument("file", type=Path, help="JSON file to import")
     parser.add_argument(
         "--type",

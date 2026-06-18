@@ -1,11 +1,13 @@
-"""SQLite database layer for NyayaSetu."""
+"""SQLite database layer for NyayaBhandu."""
 
 import json
+import shutil
 import sqlite3
 from pathlib import Path
 from typing import Any
 
-DB_PATH = Path(__file__).parent / "data" / "nyayasetu.db"
+DB_PATH = Path(__file__).parent / "data" / "nyayabhandu.db"
+_LEGACY_DB_PATH = Path(__file__).parent / "data" / "nyayasetu.db"
 SEED_PATH = Path(__file__).parent / "data" / "seed.json"
 
 
@@ -18,6 +20,8 @@ def get_connection() -> sqlite3.Connection:
 
 def init_db() -> None:
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+    if not DB_PATH.exists() and _LEGACY_DB_PATH.exists():
+        shutil.copy2(_LEGACY_DB_PATH, DB_PATH)
     conn = get_connection()
     conn.executescript(
         """
